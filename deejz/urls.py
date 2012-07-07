@@ -21,7 +21,7 @@ urlpatterns = patterns('',
 	url(r'^party\/(?P<party_slug>\w+)/current_song\.json$', 'party.views.get_current_song'),
 	
     # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
+    # url(r'^admin/', include(admin.site.urls)),
 )
 
 urlpatterns += staticfiles_urlpatterns()
