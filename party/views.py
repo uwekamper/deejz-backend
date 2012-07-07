@@ -19,7 +19,10 @@ def index(request):
 def party(request, party_slug):
 	fete = PartyPlaylist.objects.get(slug=party_slug)
 	songs = get_ordered_playlist(party_slug)
-	vetoedsongs = VetoedSong.objects.get(party=fete.id)
+	try:
+		vetoedsongs = VetoedSong.objects.get(party=fete.id)
+	except VetoedSong.DoesNotExist:
+		vetoedsongs = []
 	context = RequestContext(request, {'party': fete, 'songs': songs, 'vetoedsongs': vetoedsongs})
 	return render_to_response('party.html', context)
 	
