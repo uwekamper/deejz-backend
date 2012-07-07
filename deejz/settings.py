@@ -7,9 +7,7 @@ TEMPLATE_DEBUG = DEBUG
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 	('Uwe Kamper', 'me@uwekamper.de'),
-
 )
-
 
 MANAGERS = ADMINS
 
@@ -172,5 +170,3 @@ LOGGING = {
 
 import dj_database_url
 DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
-
-print "+++ db", DATABASES
