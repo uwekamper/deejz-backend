@@ -9,7 +9,8 @@ import random
 import string
 
 def index(request):
-	return HttpResponse("index")
+	data = serializers.serialize("json", PartyPlaylist.objects.all())
+	return HttpResponse(data, mimetype="application/json")
 	
 def party(request, party_slug):
 	playlist = PartyPlaylist.objects.get(slug=party_slug)

@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 	url(r'^party/create/$', 'party.views.create_party'),
+	url(r'^party/index\.json$', 'party.views.index'),
 	url(r'^party\/(?P<party_slug>\w+)/$', 'party.views.party'),
 	url(r'^party\/(?P<party_slug>\w+)/playlist\.json$', 'party.views.playlist_json'),
 	url(r'^party\/(?P<party_slug>\w+)/details\.json$', 'party.views.details_json'),
@@ -23,9 +24,5 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
 )
-
-urlpatterns += patterns('',
-        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/app/static'}),
-    )
 
 #urlpatterns += staticfiles_urlpatterns()
