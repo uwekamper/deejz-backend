@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import render_to_response
-from party.models import PartyPlaylist, Song, SongVote
+from party.models import PartyPlaylist, Song, SongVote, SongVeto, VetoedSong
 from django.template import RequestContext
 from django.core import serializers
 import simplejson as json
@@ -19,7 +19,8 @@ def index(request):
 def party(request, party_slug):
 	fete = PartyPlaylist.objects.get(slug=party_slug)
 	songs = get_ordered_playlist(party_slug)
-	context = RequestContext(request, {'party': fete, 'songs': songs})
+	vetoedsongs = VetoedSong.objects.get(party=fete.id)
+	context = RequestContext(request, {'party': fete, 'songs': songs, 'vetoedsongs': vetoedsongs})
 	return render_to_response('party.html', context)
 	
 def playlist_json(request, party_slug):
@@ -53,11 +54,26 @@ def add_song(request, party_slug):
 	try:
 		data = json.loads(request.raw_post_data)
 		fete = PartyPlaylist.objects.get(slug=party_slug)
-		song = Song(party=fete, 
+		
+		# check if the song was vetoed before
+		try:
+			VetoedSong.objects.get(party=fete.id, deezer_id=data['deezer_id'])
+		except VetoedSong.DoesNotExist:
+			pass
+		finally:
+			HttpResponseForbidden('Song way vetoed. Sorry.')
+			
+		# check if the song is already in the playlist
+		song, created = Song.objects.get_or_create(party=fete, 
 			added_by_uuid=data['uuid'], 
 			deezer_id=data['deezer_id'],
 			title=data['title'])
-		song.save()
+			
+		# if it existed before, than adding the song means voting for it.
+		if not created:
+			vote_song(request, party_slug, song.id, data['uuid'])
+		else:	
+			song.save()
 	except KeyError, e:
 		print e
 		return HttpResponseBadRequest("KeyError: %s" % e)
@@ -99,7 +115,7 @@ def vote_song(request, party_slug, song_id, uuid):
 		return HttpResponseForbidden('Already voted.')
 	except SongVote.DoesNotExist:
 		s = Song.objects.get(id=song_id)
-		s.votes += 1
+		s.votes = s.votes + 1
 		s.save()
 		v = SongVote(song=s, uuid=uuid)
 		v.save()
@@ -108,7 +124,7 @@ def vote_song(request, party_slug, song_id, uuid):
 # TODO veto handling and url
 def veto_song(request, party_slug, song_id, uuid):
 	try:
-		maybe_vote = SongVote.objects.get(song=song_id, uuid=uuid)
+		maybe_veto = SongVote.objects.get(song=song_id, uuid=uuid)
 		return HttpResponseForbidden('And not a veto was given that day.')
 	except SongVote.DoesNotExist:
 		s = Song.objects.get(id=song_id)

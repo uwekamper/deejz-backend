@@ -18,3 +18,8 @@
     party: 1
     deezer_id: 302127
     title: Daft Punk - Discovery
+- model: party.VetoedSong
+  pk: 1
+  fields:
+    party: 1
+    deezer_id: 1749741

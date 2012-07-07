@@ -12,12 +12,13 @@
 </div>
 <div class="row">
 	<div class="span12">
+	<h2><img src="{{ STATIC_URL }}/img/icon-playlist.png" /> The current playlist</h2>
 	<table class="table">
 		<theader>
 			<tr>
 				<th>Artist - Title</th>
 				<th>Added at</th>
-				<th>Votes</th>
+				<th><img src="{{ STATIC_URL }}/img/icon-liked.png" alt="Votes" /></th>
 				<th>Played at</th>
 			</tr>
 		</theader>
@@ -38,5 +39,6 @@
 			{% endfor %} 
 		</tbody>
 	</table>
+	<h2><img src="{{ STATIC_URL }}/img/icon-disliked.png" /> Songs that where vetoed</h2>
 	</div>
 {% endblock %}

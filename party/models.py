@@ -42,3 +42,9 @@ class SongVeto(models.Model):
 	
 	def __unicode__(self):
 		return '"%s" hates "%s"' % (self.uuid, self.song)
+		
+class VetoedSong(models.Model):
+	"""Contains the already vetoed songs so they will never be played again this night."""
+	party = models.ForeignKey('PartyPlaylist')
+	deezer_id = models.IntegerField(default=0)
+	
