@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 class PartyPlaylist(models.Model):
 	name = models.CharField(blank=False, default="It's my party.", max_length=1024)
@@ -16,7 +17,10 @@ class Song(models.Model):
 	title = models.CharField(max_length=1024, null=True)
 	played = models.DateTimeField(blank=True, null=True)
 	vetoed = models.BooleanField(default=False)
+	added_at = models.DateTimeField(default=datetime.now)
 	added_by_uuid = models.CharField(max_length=1024, null=True)
+	is_current_song = models.BooleanField(default=False)
+	votes = models.IntegerField(default=1)
 	
 	def __unicode__(self):
 		return '%s (%d)' % (self.title, self.deezer_id)

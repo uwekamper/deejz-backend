@@ -7,7 +7,7 @@
 		<address>{{ party.address }}</address>
 	</div>
 	<div class="span8">
-		Map goes here
+		Map goes here soon!
 	</div>
 </div>
 <div class="row">
@@ -15,14 +15,18 @@
 	<table class="table">
 		<theader>
 			<tr>
-				<td>Artist - Title</td>
-				<td>Played at</td>
+				<th>Artist - Title</th>
+				<th>Added at</th>
+				<th>Votes</th>
+				<th>Played at</th>
 			</tr>
 		</theader>
 		<tbody>
 			{% for song in songs %}
 			<tr>
 				<td>{{ song.title }}</td>
+				<td>{{ song.added_at }}</td>
+				<td>{{ song.votes }}</td>
 				<td>
 					{% if song.played %}
 						{{ song.played }}

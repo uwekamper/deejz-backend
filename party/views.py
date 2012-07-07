@@ -8,18 +8,23 @@ from simplejson import JSONDecodeError
 import random
 import string
 
+def get_ordered_playlist(party_slug):
+	fete = PartyPlaylist.objects.get(slug=party_slug)
+	return list(fete.song_set.order_by('-votes', 'added_at'))
+	
 def index(request):
 	data = serializers.serialize("json", PartyPlaylist.objects.all())
 	return HttpResponse(data, mimetype="application/json")
 	
 def party(request, party_slug):
-	playlist = PartyPlaylist.objects.get(slug=party_slug)
-	context = RequestContext(request, {'party': playlist, 'songs': playlist.song_set.all() })
+	fete = PartyPlaylist.objects.get(slug=party_slug)
+	songs = get_ordered_playlist(party_slug)
+	context = RequestContext(request, {'party': fete, 'songs': songs})
 	return render_to_response('party.html', context)
 	
 def playlist_json(request, party_slug):
-	fete = PartyPlaylist.objects.get(slug=party_slug)
-	data = serializers.serialize("json", fete.song_set.all())
+	songs = get_ordered_playlist(party_slug)
+	data = serializers.serialize("json", songs)
 	return HttpResponse(data, mimetype="application/json")
 
 def details_json(request, party_slug):
@@ -29,13 +34,19 @@ def details_json(request, party_slug):
 # get the current (without changing the playlist)
 def get_current_song(request, party_slug):
 	fete = PartyPlaylist.objects.get(slug=party_slug)
-	data = serializers.serialize("json", fete.song_set.all()[0:])
+	data = serializers.serialize("json", fete.song_set.filter(is_current_song=True)[0:])
 	return HttpResponse(data, mimetype="application/json")
 	
 # will move next song on playlist to current song
 def get_next_song(request, party_slug):
 	fete = PartyPlaylist.objects.get(slug=party_slug)
-	data = serializers.serialize("json", fete.song_set.all()[1:])
+	current_song = Song.objects.get(party=fete.id, is_current_song=True)
+	current_song.is_current_song = False
+	current_song.save()
+	
+	next_song = Song.objects.get(party=fete.id, is_current_song=False)[0:]
+	fete = PartyPlaylist.objects.get(slug=party_slug)
+	data = serializers.serialize("json", [next_song])
 	return HttpResponse(data, mimetype="application/json")
 	
 def add_song(request, party_slug):
@@ -88,9 +99,22 @@ def vote_song(request, party_slug, song_id, uuid):
 		return HttpResponseForbidden('Already voted.')
 	except SongVote.DoesNotExist:
 		s = Song.objects.get(id=song_id)
+		s.votes += 1
+		s.save()
 		v = SongVote(song=s, uuid=uuid)
 		v.save()
-		return HttpResponse('Vote add.')	
+		return HttpResponse('Vote add.')
+		
+# TODO veto handling and url
+def veto_song(request, party_slug, song_id, uuid):
+	try:
+		maybe_vote = SongVote.objects.get(song=song_id, uuid=uuid)
+		return HttpResponseForbidden('And not a veto was given that day.')
+	except SongVote.DoesNotExist:
+		s = Song.objects.get(id=song_id)
+		v = SongVote(song=s, uuid=uuid)
+		v.save()
+		return HttpResponse('Veto given')	
 
 def vote(request, party_slug):
 	return HttpResponse("vote")
