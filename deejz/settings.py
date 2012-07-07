@@ -172,6 +172,7 @@ LOGGING = {
 import dj_database_url
 DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
 
+import os
 EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
 if os.getenv('SENDGRID_USERNAME') is not None:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
