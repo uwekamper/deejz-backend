@@ -20,6 +20,7 @@ urlpatterns = patterns('',
 	url(r'^party\/(?P<party_slug>\w+)/add_song/$', 'party.views.add_song'),
 	url(r'^party\/(?P<party_slug>\w+)/next_song\.json$', 'party.views.get_next_song'),
 	url(r'^party\/(?P<party_slug>\w+)/current_song\.json$', 'party.views.get_current_song'),
+	url(r'^party\/(?P<party_slug>\w+)\/song\/(?P<song_id>\d+)\/vote\/(?P<uuid>[\d\w]+)\/$', 'party.views.vote_song'),
 	
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),

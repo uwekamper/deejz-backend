@@ -1,6 +1,6 @@
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import render_to_response
-from party.models import PartyPlaylist, Song
+from party.models import PartyPlaylist, Song, SongVote
 from django.template import RequestContext
 from django.core import serializers
 import simplejson as json
@@ -81,7 +81,17 @@ def create_party(request):
 		print e
 		return HttpResponseBadRequest("JSONDecodeError: %s" % e)
 	return HttpResponse('{"partyslug": "%s"}' % autoslug, mimetype="application/json")
-	
+
+def vote_song(request, party_slug, song_id, uuid):
+	try:
+		maybe_vote = SongVote.objects.get(song=song_id, uuid=uuid)
+		return HttpResponseForbidden('Already voted.')
+	except SongVote.DoesNotExist:
+		s = Song.objects.get(id=song_id)
+		v = SongVote(song=s, uuid=uuid)
+		v.save()
+		return HttpResponse('Vote add.')	
+
 def vote(request, party_slug):
 	return HttpResponse("vote")
 	
