@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from party.models import PartyPlaylist, Song, SongVote, SongVeto, VetoedSong
 from django.template import RequestContext
 from django.core import serializers
@@ -178,7 +178,7 @@ def vote_song(request, party_slug, song_id, uuid):
 		maybe_vote = SongVote.objects.get(song=song_id, uuid=uuid)
 		return HttpResponseForbidden('Already voted.')
 	except SongVote.DoesNotExist:
-		s = Song.objects.get(id=song_id)
+		s = get_object_or_404(Song, pk=song_id)
 		s.votes = s.votes + 1
 		s.save()
 		v = SongVote(song=s, uuid=uuid)
@@ -188,16 +188,15 @@ def vote_song(request, party_slug, song_id, uuid):
 # TODO veto handling and url
 def veto_song(request, party_slug, song_id, uuid):
 	try:
-		maybe_veto = SongVote.objects.get(song=song_id, uuid=uuid)
+		maybe_veto = SongVeto.objects.get(song=song_id, uuid=uuid)
 		return HttpResponseForbidden('And not a veto was given that day.')
-	except SongVote.DoesNotExist:
-		s = Song.objects.get(id=song_id)
+	except SongVeto.DoesNotExist:
+		song = get_object_or_404(Song, pk=song_id)
+		song.vetoes = song.vetoes + 1
+		if song.vetoes > 3:
+			song.vetoed = True
+		song.save()
 		v = SongVote(song=s, uuid=uuid)
 		v.save()
-		return HttpResponse('Veto given')	
-
-def vote(request, party_slug):
-	return HttpResponse("vote")
-	
-def veto(request, party_slug):
-	return HttpResponse("VETO")
+		
+		return HttpResponse('Veto registered.')	

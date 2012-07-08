@@ -21,6 +21,7 @@ class Song(models.Model):
 	added_by_uuid = models.CharField(max_length=1024, null=True)
 	is_current_song = models.BooleanField(default=False)
 	votes = models.IntegerField(default=1)
+	vetoes = models.IntegerField(default=0)
 	
 	def __unicode__(self):
 		return '%s (%d)' % (self.title, self.deezer_id)

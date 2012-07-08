@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block container %}
-<div class="row">
+<div class="row" style="margin-bottom: 20px;">
 	<div class="span4">
 		<img src="http://deejz.com/images/logo.png" height="150" style="margin-bottom:50px;">
-		<h1>{{ party.name }}</h1>
-		<h3><address>{{ party.address }}</address></h3>
+		<h1 style="color: #fff;">{{ party.name }}</h1>
+		<h3 style="color: #fff;"><address>{{ party.address }}</address></h3>
 	</div>
 	<div class="span8">
 		<div id="map" style="height: 300px"></div>
@@ -23,7 +23,7 @@
 		</script>
 	</div>
 </div>
-<div class="row">
+<div class="row" style="background-color: #fff; ">
 	<div class="span12" style="margin-top: 20px;">
 	<h2><img src="{{ STATIC_URL }}/img/icon-playlist.png" style="margin: 0 10px 6px 0;"/> The current playlist</h2>
 	<table class="table">
@@ -71,5 +71,37 @@
 		</tbody>
 	</table>
 	<h2><img src="{{ STATIC_URL }}/img/icon-disliked.png" /> Songs that where vetoed</h2>
+	<table class="table">
+		<theader>
+			<tr>
+				<th>Artist - Title</th>
+				<th>Added at</th>
+				<th><img src="{{ STATIC_URL }}/img/icon-liked.png" alt="Votes" /></th>
+				<th>Played at</th>
+			</tr>
+		</theader>
+		<tbody>
+			{% if vetoed_songs %}
+				{% for song in vetoed_songs %}
+				<tr>
+					<td>{{ song.title }}</td>
+					<td>{{ song.added_at }}</td>
+					<td>{{ song.votes }}</td>
+					<td>
+						{% if song.played %}
+							{{ song.played }}
+						{% else %}
+							not yet
+						{% endif %}
+					</td>
+				</tr>
+				{% endfor %}
+			{% else %}
+				<tr>
+					<td>No songs vetoed yet.</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+			{% endif %}
 	</div>
 {% endblock %}
