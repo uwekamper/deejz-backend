@@ -37,6 +37,16 @@ def playlist_json(request, party_slug):
 	songs = get_ordered_playlist(party_slug)
 	data = serializers.serialize("json", songs)
 	return HttpResponse(data, mimetype="application/json")
+	
+def complete_playlist_json(request, party_slug):
+	fete = PartyPlaylist.objects.get(slug=party_slug)
+	pl = []
+	# past songs
+	pl.extend(fete.song_set.filter(played__isnull=False).order_by('played'))
+	# future songs
+	pl.extend(get_ordered_playlist(party_slug))
+	data = serializers.serialize("json", pl)
+	return HttpResponse(data, mimetype="application/json")
 
 def details_json(request, party_slug):
 	data = serializers.serialize("json", [PartyPlaylist.objects.get(slug=party_slug)])
