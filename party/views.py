@@ -8,6 +8,35 @@ from simplejson import JSONDecodeError
 import random
 import string
 from datetime import datetime
+# for distance calculation
+from math import radians, cos, sin, asin, sqrt
+
+def haversine(lon1, lat1, lon2, lat2):
+    """
+    Calculate the great circle distance between two points 
+    on the earth (specified in decimal degrees)
+	source: http://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points
+    """
+    # convert decimal degrees to radians 
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+    # haversine formula 
+    dlon = lon2 - lon1 
+    dlat = lat2 - lat1 
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * asin(sqrt(a)) 
+    km = 6367 * c
+    return km
+
+def nearby_parties(request, latitude, longitude):
+	nearby = []
+	everyparty = PartyPlaylist.objects.all()
+	for i in everyparty:
+		dist = haversine(i.longitude, i.latitude, float(longitude), float(latitude))
+		# distance is less than 5 km
+		if dist < 5.0:
+			nearby.append(i)
+	data = serializers.serialize("json", nearby)
+	return HttpResponse(data, mimetype="application/json")
 
 def get_ordered_playlist(party_slug):
 	fete = PartyPlaylist.objects.get(slug=party_slug)
@@ -18,6 +47,8 @@ def get_full_playlist(party_slug):
 	# [song for song in pl if song.played == None]
 	# return pl
 	pass
+	
+
 	
 def index(request):
 	data = serializers.serialize("json", PartyPlaylist.objects.all())
