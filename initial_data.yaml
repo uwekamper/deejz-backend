@@ -12,14 +12,16 @@
       party: 1
       deezer_id: 3135556
       title: Daft Punk - Harder Better Faster Stronger
+      vetoes: 0
 - model: party.Song
   pk: 2
   fields:
     party: 1
     deezer_id: 302127
     title: Daft Punk - Discovery
+    vetoes: 0
 - model: party.VetoedSong
   pk: 1
   fields:
     party: 1
-    deezer_id: 1749741
+    deezer_id: 17497417

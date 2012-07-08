@@ -187,6 +187,7 @@ def vote_song(request, party_slug, song_id, uuid):
 		
 # TODO veto handling and url
 def veto_song(request, party_slug, song_id, uuid):
+	fete = get_object_or_404(PartyPlaylist, slug=party_slug)
 	try:
 		maybe_veto = SongVeto.objects.get(song=song_id, uuid=uuid)
 		return HttpResponseForbidden('And not a veto was given that day.')
@@ -195,6 +196,8 @@ def veto_song(request, party_slug, song_id, uuid):
 		song.vetoes = song.vetoes + 1
 		if song.vetoes > 3:
 			song.vetoed = True
+			vs = VetoedSong(party=fete, deezer_id=song.deezer_id)
+			vs.save()
 		song.save()
 		v = SongVote(song=s, uuid=uuid)
 		v.save()
