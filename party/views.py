@@ -71,13 +71,16 @@ def get_next_song(request, party_slug):
 		current_song.save()
 	except Song.DoesNotExist: 
 		pass
+	pl = get_ordered_playlist(party_slug)
+	nextlist = []
+	if len(pl) > 0:
+		next_song = pl[0]
+		next_song.played = datetime.now()
+		next_song.is_current_song = True
+		nextlist.append(next_song)
+		next_song.save()
 	
-	next_song = get_ordered_playlist(party_slug)[0]
-	next_song.played = datetime.now()
-	next_song.is_current_song = True
-	next_song.save()
-	
-	data = serializers.serialize("json", [next_song])
+	data = serializers.serialize("json", nextlist)
 	return HttpResponse(data, mimetype="application/json")
 	
 def add_song(request, party_slug):
