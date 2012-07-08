@@ -36,7 +36,9 @@ def nearby_parties(request, latitude, longitude):
 		if dist < 5.0:
 			nearby.append(i)
 	data = serializers.serialize("json", nearby)
-	return HttpResponse(data, mimetype="application/json")
+	response = HttpResponse(data, mimetype="application/json")
+	response['Access-Control-Allow-Origin'] = '*'
+	return response
 
 def get_ordered_playlist(party_slug):
 	fete = PartyPlaylist.objects.get(slug=party_slug)
