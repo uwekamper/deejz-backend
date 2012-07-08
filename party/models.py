@@ -48,4 +48,4 @@ class VetoedSong(models.Model):
 	"""Contains the already vetoed songs so they will never be played again this night."""
 	party = models.ForeignKey('PartyPlaylist')
 	deezer_id = models.IntegerField(default=0)
-	title = models.CharField(max_length=1024)
+	title = models.CharField(max_length=1024, default="Justin Bieber - ALL his songs")
