@@ -49,3 +49,6 @@ class VetoedSong(models.Model):
 	party = models.ForeignKey('PartyPlaylist')
 	deezer_id = models.IntegerField(default=0)
 	title = models.CharField(max_length=1024, default="Justin Bieber - ALL his songs")
+	
+	def __unicode__(self):
+		return self.title

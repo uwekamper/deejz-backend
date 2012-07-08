@@ -4,8 +4,8 @@
 <div class="row" style="margin-bottom: 20px;">
 	<div class="span4">
 		<img src="http://deejz.com/images/logo.png" height="150" style="margin-bottom:50px;">
-		<h1 style="color: #fff;">{{ party.name }}</h1>
-		<h3 style="color: #fff;"><address>{{ party.address }}</address></h3>
+		<h1 style="color: #fff; text-shadow: black 1px 1px 0px;">{{ party.name }}</h1>
+		<h3 style="color: #fff;  text-shadow: black 1px 1px 0px;"><address>{{ party.address }}</address></h3>
 	</div>
 	<div class="span8">
 		<div id="map" style="height: 300px"></div>
@@ -78,8 +78,8 @@
 			</tr>
 		</theader>
 		<tbody>
-			{% if vetoed_songs %}
-				{% for song in vetoed_songs %}
+			{% if vetoedsongs %}
+				{% for song in vetoedsongs %}
 				<tr>
 					<td>{{ song.title }}</td>
 				</tr>
