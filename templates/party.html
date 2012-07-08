@@ -10,24 +10,21 @@
 		<div id="map" style="height: 300px"></div>
 		<script language="javascript" type="text/javascript">
 		  var map = new L.Map('map');
-		  var cloudmade = new L.TileLayer('http://{s}.tile.cloudmade.com/114aff8ee727412a9a66e68c2ad244bf/997/256/{z}/{x}/{y}.png', {
-		    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-		    maxZoom: 18
-		  });
-		  // by default center the map to meditereanian sea
-		  var center = new L.LatLng({{ party.latitude }}, {{ party.longitude }});
-		  map.setView(center, 5).addLayer(cloudmade);
+			var cloudmade = new L.TileLayer('http://{s}.tile.cloudmade.com/114aff8ee727412a9a66e68c2ad244bf/997/256/{z}/{x}/{y}.png', {
+			    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+			    maxZoom: 18
+			});
+			var partylocation = new L.LatLng({{ party.latitude }}, {{ party.longitude }}); // geographical point (longitude and latitude)
+			map.setView(partylocation, 13).addLayer(cloudmade);
+			var markerLocation = new L.LatLng({{ party.latitude }}, {{ party.longitude }});
+			var marker = new L.Marker(markerLocation);
+			map.addLayer(marker);
 		</script>
 	</div>
 </div>
 <div class="row">
-	<div class="span12">
-	<h2> Now Playing</h2>
-		<table class="table">
-		</table>
-	</div>
-	<div class="span12">
-	<h2><img src="{{ STATIC_URL }}/img/icon-playlist.png" /> The current playlist</h2>
+	<div class="span12" style="margin-top: 20px;">
+	<h2><img src="{{ STATIC_URL }}/img/icon-playlist.png" style="margin: 0 10px 6px 0;"/> The current playlist</h2>
 	<table class="table">
 		<theader>
 			<tr>

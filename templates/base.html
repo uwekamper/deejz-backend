@@ -21,6 +21,12 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
+		<link rel="stylesheet" href="{{ STATIC_URL }}/leaflet/leaflet.css" />
+		<!--[if lte IE 8]>
+		    <link rel="stylesheet" href="{{ STATIC_URL }}/leaflet/leaflet.ie.css" />
+		<![endif]-->
+
+		<script src="{{ STATIC_URL }}/leaflet/leaflet.js"></script>
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="{{ STATIC_URL }}/bootstrap//ico/favicon.ico">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ STATIC_URL }}/bootstrap//ico/apple-touch-icon-144-precomposed.png">
@@ -72,6 +78,6 @@
     <script src="{{ STATIC_URL }}/bootstrap//js/bootstrap-collapse.js"></script>
     <script src="{{ STATIC_URL }}/bootstrap//js/bootstrap-carousel.js"></script>
     <script src="{{ STATIC_URL }}/bootstrap//js/bootstrap-typeahead.js"></script>
-		<script src="{{ STATIC_URL }}/leaflet/leaflet.js"></script>
+		
   </body>
 </html>
