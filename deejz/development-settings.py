@@ -50,8 +50,8 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-# MEDIA_ROOT = '/Users/uk/workspace/deejz/backend/static/media/'
-MEDIA_ROOT = '/app/static/media/'
+MEDIA_ROOT = '/Users/uk/workspace/deejz-backend/static/media/'
+# MEDIA_ROOT = '/app/static/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -62,15 +62,15 @@ MEDIA_URL = '/static/media'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = '' # '/Users/uk/workspace/deejz-backend/static/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/static'
+STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-	'/Users/uk/workspace/deejz/backend/static/',
+	'/Users/uk/workspace/deejz-backend/static',
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.

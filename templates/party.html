@@ -7,7 +7,17 @@
 		<address>{{ party.address }}</address>
 	</div>
 	<div class="span8">
-		Map goes here soon!
+		<div id="map" style="height: 300px"></div>
+		<script language="javascript" type="text/javascript">
+		  var map = new L.Map('map');
+		  var cloudmade = new L.TileLayer('http://{s}.tile.cloudmade.com/114aff8ee727412a9a66e68c2ad244bf/997/256/{z}/{x}/{y}.png', {
+		    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+		    maxZoom: 18
+		  });
+		  // by default center the map to meditereanian sea
+		  var center = new L.LatLng({{ party.latitude }}, {{ party.longitude }});
+		  map.setView(center, 5).addLayer(cloudmade);
+		</script>
 	</div>
 </div>
 <div class="row">

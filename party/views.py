@@ -7,10 +7,17 @@ import simplejson as json
 from simplejson import JSONDecodeError
 import random
 import string
+from datetime import datetime
 
 def get_ordered_playlist(party_slug):
 	fete = PartyPlaylist.objects.get(slug=party_slug)
-	return list(fete.song_set.order_by('-votes', 'added_at'))
+	return list(fete.song_set.filter(played__isnull=True).order_by('-votes', 'added_at'))
+	
+def get_full_playlist(party_slug):
+	# pl = get_ordered_playlist(party_slug)
+	# [song for song in pl if song.played == None]
+	# return pl
+	pass
 	
 def index(request):
 	data = serializers.serialize("json", PartyPlaylist.objects.all())
@@ -44,12 +51,18 @@ def get_current_song(request, party_slug):
 # will move next song on playlist to current song
 def get_next_song(request, party_slug):
 	fete = PartyPlaylist.objects.get(slug=party_slug)
-	current_song = Song.objects.get(party=fete.id, is_current_song=True)
-	current_song.is_current_song = False
-	current_song.save()
+	try:
+		current_song = Song.objects.get(party=fete.id, is_current_song=True)
+		current_song.is_current_song = False
+		current_song.save()
+	except Song.DoesNotExist: 
+		pass
 	
-	next_song = Song.objects.get(party=fete.id, is_current_song=False)[0:]
-	fete = PartyPlaylist.objects.get(slug=party_slug)
+	next_song = get_ordered_playlist(party_slug)[0]
+	next_song.played = datetime.now()
+	next_song.is_current_song = True
+	next_song.save()
+	
 	data = serializers.serialize("json", [next_song])
 	return HttpResponse(data, mimetype="application/json")
 	

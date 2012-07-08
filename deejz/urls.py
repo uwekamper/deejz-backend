@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     # url(r'^deejz/', include('deejz.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 	url(r'^party/create/$', 'party.views.create_party'),
 	url(r'^party/index\.json$', 'party.views.index'),
 	url(r'^party\/(?P<party_slug>\w+)/$', 'party.views.party'),
@@ -26,4 +26,4 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 )
 
-# urlpatterns += staticfiles_urlpatterns()
+urlpatterns += staticfiles_urlpatterns()
