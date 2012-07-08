@@ -13,7 +13,7 @@ class PartyPlaylist(models.Model):
 	
 class Song(models.Model):
 	party = models.ForeignKey('PartyPlaylist')
-	deezer_id = models.IntegerField(default=3135556)
+	deezer_id = models.IntegerField(default=3135556)		
 	title = models.CharField(max_length=1024, null=True)
 	played = models.DateTimeField(blank=True, null=True)
 	vetoed = models.BooleanField(default=False)
@@ -48,4 +48,4 @@ class VetoedSong(models.Model):
 	"""Contains the already vetoed songs so they will never be played again this night."""
 	party = models.ForeignKey('PartyPlaylist')
 	deezer_id = models.IntegerField(default=0)
-	
+	title = models.CharField(max_length=1024)

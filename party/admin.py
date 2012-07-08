@@ -1,5 +1,5 @@
 from django.contrib import admin
-from party.models import PartyPlaylist, Song, SongVote, SongVeto
+from party.models import PartyPlaylist, Song, SongVote, SongVeto, VetoedSong
 
 class SongInline(admin.TabularInline):
 	model = Song
@@ -14,3 +14,4 @@ admin.site.register(Song)
 
 admin.site.register(SongVote)
 admin.site.register(SongVeto)
+admin.site.register(VetoedSong)

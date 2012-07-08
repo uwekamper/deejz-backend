@@ -57,10 +57,7 @@ def index(request):
 def party(request, party_slug):
 	fete = PartyPlaylist.objects.get(slug=party_slug)
 	songs = get_ordered_playlist(party_slug)
-	try:
-		vetoedsongs = VetoedSong.objects.get(party=fete.id)
-	except VetoedSong.DoesNotExist:
-		vetoedsongs = []
+	vetoedsongs = list(VetoedSong.objects.filter(party=fete.id))
 	past_songs = fete.song_set.filter(played__isnull=False).order_by('-played')
 	
 	context = RequestContext(request, {'party': fete, 'songs': songs, 
@@ -194,12 +191,13 @@ def veto_song(request, party_slug, song_id, uuid):
 	except SongVeto.DoesNotExist:
 		song = get_object_or_404(Song, pk=song_id)
 		song.vetoes = song.vetoes + 1
+		song.save()
 		if song.vetoes > 3:
 			song.vetoed = True
-			vs = VetoedSong(party=fete, deezer_id=song.deezer_id)
+			vs = VetoedSong(party=fete, deezer_id=song.deezer_id, title=song.title)
 			vs.save()
 		song.save()
-		v = SongVote(song=s, uuid=uuid)
+		v = SongVeto(song=song, uuid=uuid)
 		v.save()
 		
 		return HttpResponse('Veto registered.')	

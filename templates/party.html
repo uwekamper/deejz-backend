@@ -75,9 +75,6 @@
 		<theader>
 			<tr>
 				<th>Artist - Title</th>
-				<th>Added at</th>
-				<th><img src="{{ STATIC_URL }}/img/icon-liked.png" alt="Votes" /></th>
-				<th>Played at</th>
 			</tr>
 		</theader>
 		<tbody>
@@ -85,15 +82,6 @@
 				{% for song in vetoed_songs %}
 				<tr>
 					<td>{{ song.title }}</td>
-					<td>{{ song.added_at }}</td>
-					<td>{{ song.votes }}</td>
-					<td>
-						{% if song.played %}
-							{{ song.played }}
-						{% else %}
-							not yet
-						{% endif %}
-					</td>
 				</tr>
 				{% endfor %}
 			{% else %}
