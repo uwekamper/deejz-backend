@@ -192,7 +192,7 @@ def veto_song(request, party_slug, song_id, uuid):
 		song = get_object_or_404(Song, pk=song_id)
 		song.vetoes = song.vetoes + 1
 		song.save()
-		if song.vetoes > 3:
+		if song.vetoes > 2:
 			song.vetoed = True
 			vs = VetoedSong(party=fete, deezer_id=song.deezer_id, title=song.title)
 			vs.save()
