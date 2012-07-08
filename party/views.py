@@ -70,7 +70,9 @@ def party(request, party_slug):
 def playlist_json(request, party_slug):
 	songs = get_ordered_playlist(party_slug)
 	data = serializers.serialize("json", songs)
-	return HttpResponse(data, mimetype="application/json")
+	response = HttpResponse(data, mimetype="application/json")
+	response['Access-Control-Allow-Origin'] = '*'
+	return response
 	
 def complete_playlist_json(request, party_slug):
 	fete = PartyPlaylist.objects.get(slug=party_slug)
