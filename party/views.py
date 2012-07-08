@@ -92,7 +92,9 @@ def details_json(request, party_slug):
 def get_current_song(request, party_slug):
 	fete = PartyPlaylist.objects.get(slug=party_slug)
 	data = serializers.serialize("json", fete.song_set.filter(is_current_song=True)[0:])
-	return HttpResponse(data, mimetype="application/json")
+	response = HttpResponse(data, mimetype="application/json")
+	response['Access-Control-Allow-Origin'] = '*'
+	return response
 	
 # will move next song on playlist to current song
 def get_next_song(request, party_slug):
