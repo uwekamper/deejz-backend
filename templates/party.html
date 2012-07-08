@@ -38,6 +38,24 @@
 			</tr>
 		</theader>
 		<tbody>
+			{% for song in past_songs %}
+			{% if song.is_current_song %}
+			<tr style="color: #004369; font-weight: bold;">
+			{% else %}
+			<tr style="color: #ddd;">
+			{% endif %}
+				<td>{% if song.is_current_song %}<i class="icon-play"></i> {% endif %}{{ song.title }}</td>
+				<td>{{ song.added_at }}</td>
+				<td>{{ song.votes }}</td>
+				<td>
+					{% if song.played %}
+						{{ song.played }}
+					{% else %}
+						not yet
+					{% endif %}
+				</td>
+			</tr>
+			{% endfor %}
 			{% for song in songs %}
 			<tr>
 				<td>{{ song.title }}</td>

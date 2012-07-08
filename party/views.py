@@ -30,7 +30,11 @@ def party(request, party_slug):
 		vetoedsongs = VetoedSong.objects.get(party=fete.id)
 	except VetoedSong.DoesNotExist:
 		vetoedsongs = []
-	context = RequestContext(request, {'party': fete, 'songs': songs, 'vetoedsongs': vetoedsongs})
+	past_songs = fete.song_set.filter(played__isnull=False).order_by('-played')
+	
+	context = RequestContext(request, {'party': fete, 'songs': songs, 
+		'vetoedsongs': vetoedsongs, 
+		'past_songs': past_songs})
 	return render_to_response('party.html', context)
 	
 def playlist_json(request, party_slug):
