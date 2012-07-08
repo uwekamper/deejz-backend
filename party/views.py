@@ -145,7 +145,7 @@ def add_song(request, party_slug):
 		print e
 		return HttpResponseBadRequest("JSONDecodeError: %s" % e)
 
-	return HttpResponse('Song added.')
+	return HttpResponse('[{"message": "Song added."}]', mimetype="application/json")
 		
 def create_party(request):
 	# try to create the autoslug as long as you need to get one that isn't in
