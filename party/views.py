@@ -50,8 +50,6 @@ def get_full_playlist(party_slug):
 	# return pl
 	pass
 	
-
-	
 def index(request):
 	data = serializers.serialize("json", PartyPlaylist.objects.all())
 	return HttpResponse(data, mimetype="application/json")
@@ -61,9 +59,11 @@ def party(request, party_slug):
 	songs = get_ordered_playlist(party_slug)
 	vetoedsongs = list(VetoedSong.objects.filter(party=fete.id))
 	past_songs = fete.song_set.filter(played__isnull=False).order_by('-played')
+	last_three_songs = past_songs[-3:]
 	
 	context = RequestContext(request, {'party': fete, 'songs': songs, 
 		'vetoedsongs': vetoedsongs, 
+		'last_three_songs': last_three_songs,
 		'past_songs': past_songs})
 	return render_to_response('party.html', context)
 	
